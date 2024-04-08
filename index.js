@@ -26,7 +26,7 @@ app.post("/", (req, res) => {
   console.log("We got a post!!")
   console.log(req.body)
 
-  connection.query(`SELECT * FROM logins WHERE name="${req.username} AND password="${req.password}";`,
+  connection.query(`SELECT * FROM logins WHERE name="${req.body.username}" AND password="${req.body.password}";`,
     (error, results, fields) => {
       console.log(`errors: ${error}`)
       console.log(`results: ${JSON.stringify(results)}`)
