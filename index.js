@@ -14,7 +14,8 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'target',
   password: 'kali', 
-  database: 'demodb'
+  database: 'demodb',
+  port: "/var/run/mysqld/mysqld.sock"
 });
 
 app.get("/", (req, res) => {
@@ -24,17 +25,20 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   console.log("We got a post!!")
   console.log(req.body)
-  // TODO handle app logic here
 
-  connection.query("USE demodb; SELECT * FROM logins WHERE 1=1;",
+  connection.query(`SELECT * FROM logins WHERE name="${req.username} AND password="${req.password}";`,
     (error, results, fields) => {
       console.log(`errors: ${error}`)
-      console.log(`results: ${results}`)
+      console.log(`results: ${JSON.stringify(results)}`)
       console.log(`fields: ${fields}`)
+    if (results.length != 0) {
+      res.send(JSON.stringify({ok: 1, username: req.username}))
     }
-  )
-  res.send(JSON.stringify({ok: 1, username: "superadmin"}))
-})
+    else {
+      res.send(JSON.stringify({ok: 0, username: "nuh uh"}))
+    }
+  }
+)
 
 // i don't know if i need this now, but i'm too scared to remove it
 const corsMiddleware = (req, res, next) => {
