@@ -36,15 +36,15 @@ app.post("/", (req, res) => {
     }
     else {
       res.send(JSON.stringify({ok: 0, username: "nuh uh"}))
-    }
-  }
-)
+    }}
+  )
+})
 
 // i don't know if i need this now, but i'm too scared to remove it
 const corsMiddleware = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'localhost'); //replace localhost with actual host
   res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, PATCH, POST, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
 
     next();
 }
