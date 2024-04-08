@@ -25,14 +25,6 @@ app.post("/", (req, res) => {
   console.log("We got a post!!")
   console.log(req.body)
   // TODO handle app logic here
-
-  connection.query("USE demodb; SELECT * FROM logins WHERE 1=1;",
-    (error, results, fields) => {
-      console.log(`errors: ${error}`)
-      console.log(`results: ${results}`)
-      console.log(`fields: ${fields}`)
-    }
-  )
   res.send(JSON.stringify({ok: 1, username: "superadmin"}))
 })
 
@@ -48,7 +40,7 @@ const corsMiddleware = (req, res, next) => {
 app.use(corsMiddleware)
 app.listen(port)
 
-connection.connect()
+// connection.connect()
 
 // connection.query("SHOW TABLES;", 
 //   (error, results, fields) => {
@@ -61,5 +53,8 @@ connection.connect()
 //   }
 // );
 //
-
 // connection.end();
+//
+process.on("exit", () => {
+  console.log("exiting")
+})
