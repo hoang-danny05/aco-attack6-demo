@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- https://mdbootstrap.com/docs/standard/extended/login/ -->
+  <meta charset="UTF-8">
+  <title>SQL INJECTION DEMO</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body { 
+      padding-top: 50px; 
+      background-color: #1b1b1b;
+    }
+    h1 {
+      display: block;
+      padding: 2rem;
+      width: 100%;
+      padding-left: 4rem;
+      color: white;
+      background-color: #4e4e4e;
+      border: 1px solid white;
+    }
+    h4 {
+      display: block;
+      height: 1.5rem;
+    }
+    form { 
+      margin: 10rem;
+      padding: 5rem;
+      border-radius: 1rem;
+      border: 1px solid #AAA;
+      background-color: #333;
+      color: white;
+    }
+    div.error {
+      background-color: #cc0000;
+      border: 1px solid #ff6666;
+    }
+    div.success {
+      background-color: #2db300;
+      border: 1px solid #8cff66;
+    }
+    div.status {
+      transition: all 0.3s ease-in;
+      margin: 1rem;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+    div.hidden {
+      height: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Very Secure Login Page!</h1>
+
+  <script>
+
+    function successfulLogin(name) {
+      const statusBar = document.getElementById("statusBar");
+      const statusText = document.getElementById("statusText")
+      statusBar.classList.remove("hidden");
+      statusBar.classList.remove("error");
+      statusBar.classList.add("success");
+      statusText.innerText = `Success! Logged in as ${name}`
+    }
+
+    function unsuccessfulLogin() {
+      const statusBar = document.getElementById("statusBar");
+      const statusText = document.getElementById("statusText")
+      statusBar.classList.remove("hidden");
+      statusBar.classList.remove("success");
+      statusBar.classList.add("error");
+      statusText.innerText = "Error. Invalid login information"
+    }
+
+    function tryLogin1() {
+      const usernameElement = document.getElementById("formUsername");
+      const username = usernameElement.value;
+      const password = document.getElementById("formPassword").value;
+      const logininfo = {username: username, password: password}
+      console.log("Login info sent:")
+      console.table(logininfo)
+      fetch("http://localhost:8080/", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(logininfo)
+      }
+      ).then((response) => {
+        if (response.ok) {
+          response.json().then(json => {
+            //{ok: bool, username?: string}
+            if (json.ok) {
+              successfulLogin(username)
+            } else {
+              unsuccessfulLogin()
+            }
+            console.log(json)
+          })
+        }
+      })
+      .catch((err) => console.table(err))
+    }
+
+  //   async function tryLogin2() {
+  //     const rawResponse = await fetch('https://httpbin.org/post', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({a: 1, b: 'Textual content'})
+  // });
+  // const content = await rawResponse.json();
+
+  // console.log(content);
+  //   }
+  </script>
+
+  <form onsubmit="return false;">
+
+    <div class="status hidden" id="statusBar">
+      <h4 id="statusText"></h4>
+    </div>
+
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+      <input type="username" id="formUsername" class="form-control" />
+      <label class="form-label" for="formUsername">Username</label>
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+      <input type="password" id="formPassword" class="form-control" />
+      <label class="form-label" for="formPassword">Password</label>
+    </div>
+
+    <!-- 2 column grid layout for inline styling -->
+    <div class="row mb-4">
+      <div class="col d-flex justify-content-center">
+        <!-- Checkbox -->
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+          <label class="form-check-label" for="form2Example31"> Remember me </label>
+        </div>
+      </div>
+
+      <div class="col">
+        <!-- Simple link -->
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Forgot password?</a>
+      </div>
+    </div>
+
+    <!-- Submit button -->
+    <!-- <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button> -->
+    <button onclick="tryLogin1()" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+    <!-- Register buttons -->
+    <!-- <div class="text-center">
+      <p>Not a member? <a href="#!">Register</a></p>
+      <p>or sign up with:</p>
+      <button type="button" class="btn btn-link btn-floating mx-1">
+        <i class="fab fa-facebook-f"></i>
+      </button>
+
+      <button type="button" class="btn btn-link btn-floating mx-1">
+        <i class="fab fa-google"></i>
+      </button>
+
+      <button type="button" class="btn btn-link btn-floating mx-1">
+        <i class="fab fa-twitter"></i>
+      </button>
+
+      <button type="button" class="btn btn-link btn-floating mx-1">
+        <i class="fab fa-github"></i>
+      </button>
+    </div> -->
+  </form>
+    
+</body>
+</html>
