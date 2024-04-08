@@ -30,6 +30,7 @@
       border: 1px solid #AAA;
       background-color: #333;
       color: white;
+      overflow: none;
     }
     div.error {
       background-color: #cc0000;
@@ -40,10 +41,13 @@
       border: 1px solid #8cff66;
     }
     div.status {
+      display: inline-block;
       transition: all 0.3s ease-in;
       margin: 1rem;
       padding: 1rem;
       border-radius: 1rem;
+      min-width: 16rem;
+      overflow: scroll;
     }
     div.hidden {
       height: 0;
