@@ -24,11 +24,17 @@ cd aco-attack6-demo
 sudo mysql;
 ```
 6) Either run the .sql file or type in the commands as follows
-Running the sql file:
+
+    Running the sql file:
 ```sql
 source /[CURRENT DIRECTORY]/init.sql
+# this is the command i used:
+# source /home/kali/aco-attack6-demo/init.sql
 ```
-Running each command at once:
+
+**OR**
+
+    Running each command at once:
 ```sql
 CREATE USER 'target'@'localhost' IDENTIFIED BY 'kali';
 
@@ -60,7 +66,9 @@ npm i
 ```
 8) Now, you should be able to run the server. Nodemon is there for development purposes.
 ```bash
-npx nodemon index.js
+npx nodemon vulnerable-server.js
+# the below is more concise 
+# node vulnerable-server.js 
 ```
 9) Visit [http://localhost:8080](http://localhost:8080) on your virtual machine to view the login page. To verify, any default login should display an error, while the login username "admin" with password "supersecret11" should display a success message. 
 ![image](https://github.com/hoang-danny05/aco-attack6-demo/assets/110684682/489bf2b0-f634-418b-aaf4-f2115b010f23)
