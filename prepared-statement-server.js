@@ -14,7 +14,8 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'target',
   password: 'kali', 
-  database: 'demodb'
+  database: 'demodb',
+  port: "/var/run/mysqld/mysqld.sock"
 });
 
 app.get("/", (req, res) => {
@@ -24,15 +25,27 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   console.log("We got a post!!")
   console.log(req.body)
-  // TODO handle app logic here
-  res.send(JSON.stringify({ok: 0, username: "superadmin"}))
+
+  connection.query("SELECT * FROM logins WHERE name=? AND password=?;",
+    [req.body.username, req.body.password],
+    (error, results, fields) => {
+      console.log(`errors: ${error}`)
+      console.log(`results: ${JSON.stringify(results)}`)
+      console.log(`fields: ${fields}`)
+    if (results.length != 0) {
+      res.send(JSON.stringify({ok: 1, username: req.username}))
+    }
+    else {
+      res.send(JSON.stringify({ok: 0, username: "nuh uh"}))
+    }}
+  )
 })
 
 // i don't know if i need this now, but i'm too scared to remove it
 const corsMiddleware = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'localhost'); //replace localhost with actual host
   res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, PATCH, POST, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
 
     next();
 }
@@ -40,7 +53,7 @@ const corsMiddleware = (req, res, next) => {
 app.use(corsMiddleware)
 app.listen(port)
 
-// connection.connect()
+connection.connect()
 
 // connection.query("SHOW TABLES;", 
 //   (error, results, fields) => {
@@ -53,8 +66,5 @@ app.listen(port)
 //   }
 // );
 //
+
 // connection.end();
-//
-process.on("exit", () => {
-  console.log("exiting")
-})
