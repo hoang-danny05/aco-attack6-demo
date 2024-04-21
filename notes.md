@@ -22,3 +22,14 @@ connection.query(`SELECT * FROM logins WHERE name="${req.body.username}" AND pas
 
 - admin
 - " OR 1 = 1 OR ""="
+
+# the php server 
+https://github.com/nicolesteffens0/sqlinjection-training-app
+- clone repo
+- docker-compose up
+- (optional) stumble around for an hour trying to find what port the server is on 
+    - (optional) fail to find the walkthough and use "netstat -ant" to find it yourself
+
+WORKING ATTACKS
+- ' OR 1=1 -- //
+goes to admin
